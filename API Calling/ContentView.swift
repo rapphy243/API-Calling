@@ -15,20 +15,35 @@ struct ContentView: View {
             VStack {
                 Text(dailyImage.title)
                     .font(.title).bold()
-                AsyncImage(url: dailyImage.url) { image in // https://www.swiftanytime.com/blog/asyncimage-in-swiftui
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    Image(systemName: "photo.fill")
+                if dailyImage.media_type == "image" {
+                    AsyncImage(url: dailyImage.url) { image in // https://www.swiftanytime.com/blog/asyncimage-in-swiftui
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } placeholder: {
+                        Image(systemName: "photo.fill")
+                            .border(Color.gray)
+                        
+                    }
+                    .frame(width: 250, height: 350)
                 }
-                .frame(width: 250, height: 350)
-                .border(Color.gray)
-                Text(dailyImage.date)
-                Text(dailyImage.explanation)
-                    .padding()
+                ScrollView {
+                    Text(dailyImage.explanation)
+                }
+                .padding()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    DatePicker("", selection: $date, in: ...Date(), displayedComponents: .date)
+                        .onChange(of: date) {
+                            Task { // https://stackoverflow.com/questions/74449780/ios-swiftui-cannot-pass-function-of-type-async-void-to-parameter-expec
+                                await getDailyImage(date: date)
+                            }
+                        }
+                }
             }
         }
+        .navigationTitle("NASA Image of the Day")
         .task {
             await getDailyImage()
         }
@@ -71,12 +86,14 @@ struct DailyImage: Codable {
     var title: String
     var explanation: String
     var date: String
+    var media_type: String
     
     init() {
         url = URL(string: "")
         title = ""
         explanation = ""
         date = ""
+        media_type = "image"
     }
 }
 
