@@ -15,8 +15,13 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text(dailyImage.title)
-                    .font(.title).bold()
+                HStack {
+                    Spacer()
+                    Text(dailyImage.title)
+                        .font(.title).bold()
+                        .frame(minHeight: 100)
+                    Spacer()
+                }
                 if dailyImage.media_type == "image" { //Sometimes APOD is a video
                     customAsyncImage(url: dailyImage.url)
                 }
@@ -29,11 +34,15 @@ struct ContentView: View {
                         .font(.caption)
                     
                 }
-                ScrollView {
-                    Text(dailyImage.explanation)
-                        .font(.body)
+                HStack {
+                    Spacer()
+                    ScrollView {
+                        Text(dailyImage.explanation)
+                            .font(.body)
+                    }
+                    .padding()
+                    Spacer()
                 }
-                .padding()
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
