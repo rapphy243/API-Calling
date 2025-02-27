@@ -37,7 +37,7 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    DatePicker("", selection: $date, in: ...Date(), displayedComponents: .date)
+                    DatePicker("", selection: $date, in: dateFromFirstImage(), displayedComponents: .date)
                         .onChange(of: date) {
                             Task { // https://stackoverflow.com/questions/74449780/ios-swiftui-cannot-pass-function-of-type-async-void-to-parameter-expec
                                 await getDailyImage(date: date)
@@ -87,10 +87,19 @@ struct ContentView: View {
         showingAlert = true
     }
     
-    func dateToString (date: Date) -> String {
+    func dateToString (date: Date) -> String { // Helper function for getDailyImage
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "yyyy-MM-dd"
         return dateFormater.string(from: date)
+    }
+    
+    func dateFromFirstImage() -> ClosedRange<Date> { // Used for date picker so user cannot input a invalid date
+        var dateComponents = DateComponents()
+        dateComponents.year = 1995
+        dateComponents.month = 6
+        dateComponents.day = 16
+        //This date is the first APOD
+        return Calendar.current.date(from: dateComponents)!...Date()
     }
 }
 
@@ -100,12 +109,14 @@ struct customAsyncImage: View {
         AsyncImage(url: url) { image in
             image
                 .resizable()
+                .frame(maxWidth: .infinity, maxHeight: 350)
+                .frame(height: 350)
                 .aspectRatio(contentMode: .fill)
         } placeholder: {
             Image(systemName: "photo.fill")
                 .border(Color.gray)
+                .frame(width: 250, height: 350)
         }
-        .frame(width: 250, height: 350)
     }
 }
 
