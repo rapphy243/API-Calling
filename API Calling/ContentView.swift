@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var dailyImage: DailyImage = DailyImage()
     @State private var date: Date = Date()
+    @State private var showingAlert = false
     @Environment(\.openURL) var openURL //used for if AIOD is a video
     var body: some View {
         NavigationView {
@@ -71,6 +72,9 @@ struct ContentView: View {
         .task {
             await getDailyImage()
         }
+        .alert(isPresented: $showingAlert, content: {
+            Alert(title: Text("Loading Error"), message: Text("There was a problem loading the APOD"))
+        })
     }
     
     func getDailyImage() async {
@@ -80,9 +84,11 @@ struct ContentView: View {
             if let (data, _) = try? await URLSession.shared.data(from: url) {
                 if let decodedData = try? JSONDecoder().decode(DailyImage.self, from: data) {
                     self.dailyImage = decodedData
+                    return
                 }
             }
         }
+        showingAlert = true
     }
     
     func getDailyImage(date: Date) async {
@@ -93,9 +99,11 @@ struct ContentView: View {
             if let (data, _) = try? await URLSession.shared.data(from: url) { // Decode data to dailyImage struct
                 if let decodedData = try? JSONDecoder().decode(DailyImage.self, from: data) {
                     self.dailyImage = decodedData
+                    return
                 }
             }
         }
+        showingAlert = true
     }
     
     func dateToString (date: Date) -> String {
