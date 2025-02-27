@@ -18,31 +18,13 @@ struct ContentView: View {
                 Text(dailyImage.title)
                     .font(.title).bold()
                 if dailyImage.media_type == "image" { //Sometimes APOD is a video
-                    AsyncImage(url: dailyImage.url) { image in // https://www.swiftanytime.com/blog/asyncimage-in-swiftui
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } placeholder: {
-                        Image(systemName: "photo.fill")
-                            .border(Color.gray)
-                        
-                    }
-                    .frame(width: 250, height: 350)
+                    customAsyncImage(url: dailyImage.url)
                 }
                 else {
-                    AsyncImage(url: dailyImage.thumbnail_url) { image in // https://www.swiftanytime.com/blog/asyncimage-in-swiftui
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } placeholder: {
-                        Image(systemName: "photo.fill")
-                            .border(Color.gray)
-                        
-                    }
-                    .onTapGesture {
-                        openURL(dailyImage.url!)
-                    }
-                    .frame(width: 250, height: 350)
+                    customAsyncImage(url: dailyImage.thumbnail_url)
+                        .onTapGesture {
+                            openURL(dailyImage.url!)
+                        }
                     Text("Tap Image To Watch Video")
                         .font(.caption)
                     
@@ -61,11 +43,10 @@ struct ContentView: View {
                                 await getDailyImage(date: date)
                             }
                         }
-                }
+                    }
                 ToolbarItem(placement: .topBarLeading) {
-                    Text("Astronomy Picture Date: ")
+                    Text("Astronomy Picture Date:")
                 }
-                
             }
         }
         .navigationTitle("NASA Image of the Day")
@@ -110,6 +91,21 @@ struct ContentView: View {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "yyyy-MM-dd"
         return dateFormater.string(from: date)
+    }
+}
+
+struct customAsyncImage: View {
+    let url: URL?
+    var body: some View {
+        AsyncImage(url: url) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+        } placeholder: {
+            Image(systemName: "photo.fill")
+                .border(Color.gray)
+        }
+        .frame(width: 250, height: 350)
     }
 }
 
