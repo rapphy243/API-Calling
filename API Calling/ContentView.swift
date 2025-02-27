@@ -95,21 +95,21 @@ struct ContentView: View {
         }
         showingAlert = true
     }
-    
-    func dateToString (date: Date) -> String { // Helper function for getDailyImage
-        let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "yyyy-MM-dd"
-        return dateFormater.string(from: date)
-    }
-    
-    func dateFromFirstImage() -> ClosedRange<Date> { // Used for date picker so user cannot input a invalid date
-        var dateComponents = DateComponents()
-        dateComponents.year = 1995
-        dateComponents.month = 6
-        dateComponents.day = 16
-        //This date is the first APOD
-        return Calendar.current.date(from: dateComponents)!...Date()
-    }
+}
+
+func dateToString (date: Date) -> String { // Helper function for getDailyImage
+    let dateFormater = DateFormatter()
+    dateFormater.dateFormat = "yyyy-MM-dd"
+    return dateFormater.string(from: date)
+}
+
+func dateFromFirstImage() -> ClosedRange<Date> { // Used for date picker so user cannot input a invalid date
+    var dateComponents = DateComponents()
+    dateComponents.year = 1995
+    dateComponents.month = 6
+    dateComponents.day = 16
+    //This date is the first APOD
+    return Calendar.current.date(from: dateComponents)!...Date()
 }
 
 struct customAsyncImage: View {
