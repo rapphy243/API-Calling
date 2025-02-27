@@ -3,7 +3,7 @@
 ## Introduction
 This app was created to demonstrate the use of json API calls using publicly available API source. This app uses NASA's APOD (Astronomy Picture of the Day) API and displays the title, image, and explanation.
 ##
-![Example of App Running](https://i.rap.ph/example-bVQtdg3u.mp4)
+![Example of App Running](https://i.rap.ph/example-wLzZTj4j.mp4)
 
 ## Features
 - Gets APOD from NASA API and displays it on screen
