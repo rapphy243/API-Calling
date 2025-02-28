@@ -97,7 +97,7 @@ struct ContentView: View {
     }
 }
 
-func dateToString (date: Date) -> String { // Helper function for getDailyImage
+func dateToString(date: Date) -> String { // Helper function for getDailyImage
     let dateFormater = DateFormatter()
     dateFormater.dateFormat = "yyyy-MM-dd"
     return dateFormater.string(from: date)
@@ -120,7 +120,10 @@ struct customAsyncImage: View {
                 .resizable()
                 .frame(maxWidth: .infinity, maxHeight: 350)
                 .frame(height: 350)
-                .aspectRatio(contentMode: .fill)
+                .scaledToFit()
+                .contextMenu {
+                    ShareLink(item: image, preview: SharePreview("Share", image: image))
+                }
         } placeholder: {
             Image(systemName: "photo.fill")
                 .border(Color.gray)
