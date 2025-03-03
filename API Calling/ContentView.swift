@@ -12,6 +12,10 @@ struct ContentView: View {
     @State private var date: Date = Date()
     @State private var showingAlert = false
     @Environment(\.openURL) var openURL //used for if AIOD is a video
+    @State private var dailyImage: DailyImage = DailyImage()
+    @State private var date: Date = Date()
+    @State private var showingAlert = false
+    @Environment(\.openURL) var openURL //used for if AIOD is a video
     var body: some View {
         NavigationView {
             VStack {
